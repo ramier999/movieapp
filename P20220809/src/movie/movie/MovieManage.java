@@ -90,28 +90,4 @@ public class MovieManage extends DAO{
 		return list;
 	}
 
-	// 날짜 정보 변경
-	public List<Movie> movieDateInfo(String title) {
-		Movie movie = null;
-		List<Movie> list = new ArrayList<>();
-		try{
-			conn();
-			String sql = "SELECT TO_CHAR(movie_start, 'YYMMDD') as movie_start, TO_CHAR(movie_end, 'YYMMDD') as movie_end FROM movie WHERE movie_title =?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, title);
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				movie = new Movie();
-				movie.setMovieTitle(rs.getString("movie_title"));
-				movie.setMovieStart(rs.getString("movie_start"));
-				movie.setMovieEnd(rs.getString("movie_end"));
-				list.add(movie);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			disconnect();
-		}
-		return list;
-	}
 }

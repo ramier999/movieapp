@@ -14,11 +14,11 @@ public class TheaterService {
 		Theater theater = new Theater();
 		
 		System.out.println("상영할 상영관의 번호를 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		int theaterNo = Integer.parseInt(scn.nextLine());
 		theater.setTheaterNo(theaterNo);
 		System.out.println("상영할 영화 제목을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String title = scn.nextLine();
 		theater.setMovieTitle(title);
 		
@@ -35,15 +35,15 @@ public class TheaterService {
 		Theater theater = new Theater();
 		
 		System.out.println("상영할 시간을 지정할 상영관의 번호를 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		int theaterNo = Integer.parseInt(scn.nextLine());
 		theater.setTheaterNo(theaterNo);
 		System.out.println("상영관의 상영 순번을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		int timeNo = Integer.parseInt(scn.nextLine());
 		theater.setTimeNo(timeNo);
 		System.out.println("상영할 시간을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String timetable = scn.nextLine();
 		theater.setMovieTimeTable(timetable);
 		
@@ -55,35 +55,57 @@ public class TheaterService {
 		}
 	}
 	
+	// 영화 상영관 조회
+	public void theaterNoInfo() {
+		List<Theater> list = TheaterManage.getInstance().theaterNoInfo();
+		System.out.println("┌─────── 영화 시간표 ───────┐");
+		System.out.println("────────────────────────────");
+		for(Theater theater : list) {
+			System.out.println("  상영관 : 제 "+theater.getTheaterNo()+" 상영관");
+			System.out.println("  제목 : "+theater.getMovieTitle());
+			System.out.println("────────────────────────────");
+		}
+		System.out.println("└───────────────────────────┘");
+	}
+	
 	// 영화 시간표 조회
 	public void timetableInfo() {
 		List<Theater> list = TheaterManage.getInstance().timetableInfo();
-		System.out.println("========== 영화 시간표 ==========");
-		System.out.println("-------------------------------");
+		System.out.println("┌─────── 영화 시간표 ───────┐");
+		System.out.println(" ──────────────────────────");
 		for(Theater theater : list) {
-			System.out.println("제목 : "+theater.getMovieTitle());
-			System.out.println("시간 : "+theater.getMovieTimeTable());
-			System.out.println("-------------------------------");
+			System.out.println("  제목 : "+theater.getMovieTitle());
+			System.out.println("  시간 : "+theater.getMovieTimeTable());
+			System.out.println(" ──────────────────────────");
 		}
-		System.out.println("===============================");
+		System.out.println("└───────────────────────────┘");
 	}
 	
 	// 영화 좌석 조회
 	public void seatInfo() {
 		System.out.println("영화 제목을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String title = scn.nextLine();
 		System.out.println("영화 시간을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String time = scn.nextLine();
 		List<Theater> list = TheaterManage.getInstance().seatInfo(title, time);
 		System.out.println("[빈 좌석은 □, 예매된 좌석은 ■로 표시됩니다.]");
-		System.out.println(" A1 A2 A3 A4 A5 B1 B2 B3 B4 B5");
+		System.out.println("┌──────────────┐");
+		System.out.println("│    SCREEN    │");
+		System.out.println("└──────────────┘");
+		System.out.println(" A1  A2  A3  A4  A5");
+		int i = 0;
 		for(Theater theater : list) {
 			if(theater.getOnoff().equals("0")) {
 				System.out.print(" □ ");
 			} else if(theater.getOnoff().equals("1")) {
 				System.out.print(" ■ ");
+			}
+			i++;
+			if(i==5) {
+				System.out.println();
+				System.out.println(" B1  B2  B3  B4  B5");
 			}
 		}
 		System.out.println();
@@ -92,13 +114,13 @@ public class TheaterService {
 	// 좌석 예매 여부
 	public void checkSeat() {
 		System.out.println("영화 제목을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String title = scn.nextLine();
 		System.out.println("영화 시간을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String time = scn.nextLine();
 		System.out.println("좌석을 입력하세요.");
-		System.out.print(">> ");
+		System.out.print(" ▶ ");
 		String seat = scn.nextLine();
 		List<Theater> list = TheaterManage.getInstance().checkSeat(title, time, seat);
 		for(Theater theater : list) {
@@ -109,5 +131,5 @@ public class TheaterService {
 			}
 		}
 	}
-
+	
 }

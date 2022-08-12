@@ -18,5 +18,6 @@ public class Ticket {
 	private int specialNo;	// 우대
 	private String memberState; 
 	private int price;
+	private int finalPrice;
 	
 }

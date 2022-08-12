@@ -51,6 +51,46 @@ public class TheaterManage extends DAO {
 		return result;
 	}
 	
+	// 상영관 - 시간표 삭제
+	public int deleteTimetable(int theaterNo) {
+		int result = 0;
+		try {
+			conn();
+			String sql = "UPDATE theater SET movie_timetable = null WHERE theater_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, theaterNo);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return result;
+	}
+	
+	// 영화 상영관 조회
+	public List<Theater> theaterNoInfo() {
+		List<Theater> list = new ArrayList<>();
+		Theater theater = null;
+		try {
+			conn();
+			String sql = "SELECT theater_no, movie_title FROM theater WHERE movie_title IS NOT NULL AND time_no = 1 AND seat = 'A1' ORDER BY theater_no";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				theater = new Theater();
+				theater.setTheaterNo(rs.getInt("theater_no"));
+				theater.setMovieTitle(rs.getString("movie_title"));
+				list.add(theater);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return list;
+	}
+	
 	// 영화 시간표 조회
 	public List<Theater> timetableInfo() {
 		List<Theater> list = new ArrayList<>();

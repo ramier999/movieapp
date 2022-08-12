@@ -17,29 +17,29 @@ public class Application {
 	
 	private void movieApp() {
 		while(run) {
-		System.out.println("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-		System.out.println("┃    WELCOME TO MOVIE APP!!    ┃");
-		System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-		System.out.println("┌───────────────────────────────┐");
-		System.out.println("  1. 로그인 │ 2. 회원가입 │ 3. 종료  ");
-		System.out.println("└───────────────────────────────┘");
-		System.out.print(">> ");
-		selectNo = Integer.parseInt(scn.nextLine());
-		switch(selectNo) {
-		case 1:
-			ms.loginId();
-			if(MemberService.memberInfo!=null) {
-				new Application2();
+			System.out.println("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+			System.out.println("┃    WELCOME TO MOVIE APP!!    ┃");
+			System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+			System.out.println("┌──────────────────────────────────┐");
+			System.out.println("  1. 로그인 │ 2. 회원가입 │ 3. 종료  ");
+			System.out.println("└──────────────────────────────────┘");
+			System.out.print(" ▶ ");
+			selectNo = Integer.parseInt(scn.nextLine());
+			switch(selectNo) {
+			case 1:
+				ms.loginId();
+				if(MemberService.memberInfo!=null) {
+					new Application2();
+				}
+				break;
+			case 2:
+				ms.registMemberU();
+				break;
+			case 3:
+				System.out.println("MOVIE APP을 종료합니다.");
+				run = false;
+				break;
 			}
-			break;
-		case 2:
-			ms.registMemberU();
-			break;
-		case 3:
-			System.out.println("MOVIE APP을 종료합니다.");
-			run = false;
-			break;
 		}
-	}
 	}
 }

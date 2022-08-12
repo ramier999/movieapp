@@ -107,8 +107,26 @@ public class MemberManage extends DAO{
 		return list;
 	}
 	
+	// 고객 정보 수정(비밀번호)
+	public int updateMemberP(String id, String pw) {
+		int result = 0;
+		try {
+			conn();
+			String sql = "UPDATE cinemamember SET member_pw = ? WHERE member_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pw);
+			pstmt.setString(2, id);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return result;
+	}
+	
 	// 고객 정보 수정(연락처)
-	public int updateMember(String id, String tel) {
+	public int updateMemberT(String id, String tel) {
 		int result = 0;
 		try {
 			conn();

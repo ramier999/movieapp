@@ -133,14 +133,67 @@ public class TicketManage extends DAO {
 		return result;
 	}
 	
-	// 예매 취소 - 티켓 번호 따라
-	public int cancelTicket3(int num) {
+	// 예매 취소 - 좌석비우기 전부(상영관 영화 변경시)
+	public int cancelTicket3(int theaterNo) {
 		int result = 0;
 		try {
 			conn();
-			String sql = "DELETE FROM ticket WHERE ticket_no = ?";
+			String sql = "UPDATE theater SET onoff = 0 WHERE theater_no = ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, num);
+			pstmt.setInt(1, theaterNo);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return result;
+	}
+	
+	// 예매 취소 - 티켓 삭제 전부(상영관 영화 변경시)
+	public int cancelTicket4(int theaterNo) {
+		int result = 0;
+		try {
+			conn();
+			String sql = "DELETE FROM ticket WHERE movie_title IN (SELECT movie_title FROM theater WHERE theater_no = ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, theaterNo);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return result;
+	}
+	
+	// 예매 취소 - 좌석비우기 전부(시간표 변경시)
+	public int cancelTicket5(int theaterNo, String time) {
+		int result = 0;
+		try {
+			conn();
+			String sql = "UPDATE theater SET onoff = 0 WHERE movie_timetable = ? AND theater_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, time);
+			pstmt.setInt(2, theaterNo);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return result;
+	}
+	
+	// 예매 취소 - 티켓 번호 따라
+	public int cancelTicket6(int theaterNo, String time) {
+		int result = 0;
+		try {
+			conn();
+			String sql = "DELETE FROM ticket WHERE movie_timetable = ? AND movie_title IN (SELECT movie_title FROM theater WHERE theater_no =?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, time);
+			pstmt.setInt(2, theaterNo);
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -171,6 +224,52 @@ public class TicketManage extends DAO {
 				ticket.setMovieTimetable(rs.getString("movie_timetable"));
 				ticket.setTheaterNo(rs.getInt("theater_no"));
 				ticket.setSeat(rs.getString("seat"));
+				list.add(ticket);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return list;
+	}
+	
+	// 가격표 조회
+	public List<Ticket> priceInfo(){
+		Ticket ticket = null;
+		List<Ticket> list = new ArrayList<>();
+		try {
+			conn();
+			String sql = "SELECT member_state, price FROM price";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				ticket = new Ticket();
+				ticket.setMemberState(rs.getString("member_state"));
+				ticket.setPrice(rs.getInt("price"));
+				list.add(ticket);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return list;
+	}
+	
+	// 가격 가져오기
+	public List<Ticket> getPriceInfo(String state){
+		Ticket ticket = null;
+		List<Ticket> list = new ArrayList<>();
+		try {
+			conn();
+			String sql = "SELECT price FROM price WHERE member_state =?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, state);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				ticket = new Ticket();
+				ticket.setPrice(rs.getInt("price"));
 				list.add(ticket);
 			}
 		} catch(Exception e) {
